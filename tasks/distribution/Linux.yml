@@ -37,9 +37,11 @@
     - item.src is defined or item.stdin and item.stdin_cmd is defined
     - item.repo in restic_repos
 
-- name: Setup CRON jobs
+- name: Setup backup CRON jobs
   cron:
     name: 'arillso.restic backup {{ item.name }}'
+    cron_file: 'restic-backup-{{ item.name }}'
+    user: root
     job: 'CRON=true {{ restic_script_dir }}/backup-{{ item.name }}.sh'
     minute: '{{ item.schedule_minute | default("*") }}'
     hour: '{{ item.schedule_hour | default("*") }}'
@@ -53,3 +55,22 @@
     - restic_create_cron
     - item.name is defined
     - item.scheduled | default(false)
+
+- name: Setup prune CRON jobs
+  cron:
+    name: 'arillso.restic prune {{ item.name }}'
+    cron_file: 'restic-prune-{{ item.name }}'
+    user: root
+    job: 'PRUNE=true {{ restic_script_dir }}/backup-{{ item.name }}.sh'
+    minute: '{{ item.prune_schedule_minute | default("*") }}'
+    hour: '{{ item.prune_schedule_hour | default("*") }}'
+    weekday: '{{ item.prune_schedule_weekday | default("*") }}'
+    month: '{{ item.prune_schedule_month | default("*") }}'
+    state: present
+  become: true
+  no_log: true
+  with_items: "{{ restic_backups }}"
+  when:
+    - restic_create_cron
+    - item.name is defined
+    - item.prune_scheduled | default(false)

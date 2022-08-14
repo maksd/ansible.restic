@@ -69,8 +69,8 @@ ansible-galaxy install arillso.restic
 
 ## Requirements
 
-* bzip2
-  
+- bzip2
+
   ## Role Variables
 
 | Name                            | Default                                                                                                            | Description                                                                 |
@@ -95,7 +95,7 @@ to be able to use this role. A repository can be local or remote (see the
 official [documentation](https://restic.readthedocs.io/en/stable/030_preparing_a_new_repo.html)).
 
 > **Using an SFTP repository**
-> 
+>
 > For using an SFTP backend, the user needs passwordless access to the host.
 > Please make sure to distribute ssh keys accordingly, as this is outside of
 > the scope of this role.
@@ -103,15 +103,15 @@ official [documentation](https://restic.readthedocs.io/en/stable/030_preparing_a
 Available variables:
 
 | Name                    | Required | Description                                                                                                                                                                                                                                                                                                                                                                                                        |
-| ----------------------- |:--------:| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `location`              | yes      | The location of the Backend. Currently, [Local](https://restic.readthedocs.io/en/stable/030_preparing_a_new_repo.html#local), [SFTP](https://restic.readthedocs.io/en/stable/030_preparing_a_new_repo.html#sftp), [S3](https://restic.readthedocs.io/en/stable/030_preparing_a_new_repo.html#amazon-s3) and [B2](https://restic.readthedocs.io/en/stable/030_preparing_a_new_repo.html#backblaze-b2) are supported |
-| `password`              | yes      | The password used to secure this repository                                                                                                                                                                                                                                                                                                                                                                        |
-| `init`                  | no       | Describes if the repository should be initialized or not. Use `false` if you are backuping to an already existing repo.                                                                                                                                                                                                                                                                                            |
-| `aws_access_key`        | no       | The access key for the S3 backend                                                                                                                                                                                                                                                                                                                                                                                  |
-| `aws_secret_access_key` | no       | The secret access key for the S3 backend                                                                                                                                                                                                                                                                                                                                                                           |
-| `aws_default_region`    | no       | The desired region for the S3 backend                                                                                                                                                                                                                                                                                                                                                                              |
-| `b2_account_id`         | no       | The account ID for Backblaze B2 backend                                                                                                                                                                                                                                                                                                                                                                            |
-| `b2_account_key`        | no       | The account key for Backblaze B2 backend                                                                                                                                                                                                                                                                                                                                                                           |
+| ----------------------- | :------: | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `location`              |   yes    | The location of the Backend. Currently, [Local](https://restic.readthedocs.io/en/stable/030_preparing_a_new_repo.html#local), [SFTP](https://restic.readthedocs.io/en/stable/030_preparing_a_new_repo.html#sftp), [S3](https://restic.readthedocs.io/en/stable/030_preparing_a_new_repo.html#amazon-s3) and [B2](https://restic.readthedocs.io/en/stable/030_preparing_a_new_repo.html#backblaze-b2) are supported |
+| `password`              |   yes    | The password used to secure this repository                                                                                                                                                                                                                                                                                                                                                                        |
+| `init`                  |    no    | Describes if the repository should be initialized or not. Use `false` if you are backuping to an already existing repo.                                                                                                                                                                                                                                                                                            |
+| `aws_access_key`        |    no    | The access key for the S3 backend                                                                                                                                                                                                                                                                                                                                                                                  |
+| `aws_secret_access_key` |    no    | The secret access key for the S3 backend                                                                                                                                                                                                                                                                                                                                                                           |
+| `aws_default_region`    |    no    | The desired region for the S3 backend                                                                                                                                                                                                                                                                                                                                                                              |
+| `b2_account_id`         |    no    | The account ID for Backblaze B2 backend                                                                                                                                                                                                                                                                                                                                                                            |
+| `b2_account_key`        |    no    | The account key for Backblaze B2 backend                                                                                                                                                                                                                                                                                                                                                                           |
 
 Example:
 
@@ -134,30 +134,36 @@ Repository defined in `restic_repos`.
 
 Available variables:
 
-| Name               | Required (Default)            | Description                                                                                                                                                                  |
-| ------------------ |:-----------------------------:| ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `name`             | yes                           | The name of this backup. Used together with pruning and scheduling and needs to be unique.                                                                                   |
-| `repo`             | yes                           | The name of the repository to backup to.                                                                                                                                     |
-| `src`              | yes                           | The source directory or file                                                                                                                                                 |
-| `stdin`            | no                            | Is this backup created from a [stdin](https://restic.readthedocs.io/en/stable/040_backup.html#reading-data-from-stdin)?                                                      |
-| `stdin_cmd`        | no (yes if `stdin` == `true`) | The command to produce the stdin.                                                                                                                                            |
-| `stdin_filename`   | no                            | The filename used in the repository.                                                                                                                                         |
-| `tags`             | no                            | Array of default tags                                                                                                                                                        |
-| `keep_last`        | no                            | If set, only keeps the last n snapshots.                                                                                                                                     |
-| `keep_hourly`      | no                            | If set, only keeps the last n hourly snapshots.                                                                                                                              |
-| `keep_daily`       | no                            | If set, only keeps the last n daily snapshots.                                                                                                                               |
-| `keep_weekly `     | no                            | If set, only keeps the last n weekly snapshots.                                                                                                                              |
-| `keep_monthly`     | no                            | If set, only keeps the last n monthly snapshots.                                                                                                                             |
-| `keep_yearly `     | no                            | If set, only keeps the last n yearly snapshots.                                                                                                                              |
-| `keep_within`      | no                            | If set, only keeps snapshots in this time period.                                                                                                                            |
-| `keep_tag`         | no                            | If set, keep snapshots with this tags. Make sure to specify a list.                                                                                                          |
-| `prune`            | no (`false`)                  | If `true`, the `restic forget` command in the script has the [`--prune` option](https://restic.readthedocs.io/en/stable/060_forget.html#removing-backup-snapshots) appended. |
-| `scheduled`        | no (`false`)                  | If `restic_create_cron` is set to `true`, this backup is scheduled.                                                                                                          |
-| `schedule_minute`  | no (`*`)                      | Minute when the job is run. ( 0-59, *, */2, etc )                                                                                                                            |
-| `schedule_hour`    | no (`*`)                      | Hour when the job is run. ( 0-23, *, */2, etc )                                                                                                                              |
-| `schedule_weekday` | no (`*`)                      | Weekday when the job is run.  ( 0-6 for Sunday-Saturday, *, etc )                                                                                                            |
-| `schedule_month`   | no (`*`)                      | Month when the job is run. ( 1-12, *, */2, etc )                                                                                                                             |
-| `exclude`          | no (`{}`)                     | Allows you to specify files to exclude. See [Exclude](#exclude) for reference.                                                                                               |
+| Name                     |      Required (Default)       | Description                                                                                                                                                                  |
+| ------------------------ | :---------------------------: | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `name`                   |              yes              | The name of this backup. Used together with pruning and scheduling and needs to be unique.                                                                                   |
+| `repo`                   |              yes              | The name of the repository to backup to.                                                                                                                                     |
+| `src`                    |              yes              | The source directory or file                                                                                                                                                 |
+| `stdin`                  |              no               | Is this backup created from a [stdin](https://restic.readthedocs.io/en/stable/040_backup.html#reading-data-from-stdin)?                                                      |
+| `stdin_cmd`              | no (yes if `stdin` == `true`) | The command to produce the stdin.                                                                                                                                            |
+| `stdin_filename`         |              no               | The filename used in the repository.                                                                                                                                         |
+| `tags`                   |              no               | Array of default tags                                                                                                                                                        |
+| `keep_last`              |              no               | If set, only keeps the last n snapshots.                                                                                                                                     |
+| `keep_hourly`            |              no               | If set, only keeps the last n hourly snapshots.                                                                                                                              |
+| `keep_daily`             |              no               | If set, only keeps the last n daily snapshots.                                                                                                                               |
+| `keep_weekly`            |              no               | If set, only keeps the last n weekly snapshots.                                                                                                                              |
+| `keep_monthly`           |              no               | If set, only keeps the last n monthly snapshots.                                                                                                                             |
+| `keep_yearly`            |              no               | If set, only keeps the last n yearly snapshots.                                                                                                                              |
+| `keep_within`            |              no               | If set, only keeps snapshots in this time period.                                                                                                                            |
+| `keep_tag`               |              no               | If set, keep snapshots with this tags. Make sure to specify a list.                                                                                                          |
+| `scheduled`              |         no (`false`)          | If `restic_create_cron` is set to `true`, this backup is scheduled.                                                                                                          |
+| `schedule_minute`        |           no (`*`)            | Minute when the job is run. ( 0-59, _, _/2, etc )                                                                                                                            |
+| `schedule_hour`          |           no (`*`)            | Hour when the job is run. ( 0-23, _, _/2, etc )                                                                                                                              |
+| `schedule_weekday`       |           no (`*`)            | Weekday when the job is run. ( 0-6 for Sunday-Saturday, \*, etc )                                                                                                            |
+| `schedule_month`         |           no (`*`)            | Month when the job is run. ( 1-12, _, _/2, etc )                                                                                                                             |
+| `prune_forget`           |         no (`false`)          | If `true`, the `restic forget` command in the script has the [`--prune` option](https://restic.readthedocs.io/en/stable/060_forget.html#removing-backup-snapshots) appended. |
+| `prune_scheduled`        |         no (`false`)          | If `restic_create_cron` is set to `true`, this backup prune is scheduled.                                                                                                    |
+| `prune_schedule_minute`  |           no (`*`)            | Minute when the job is run. ( 0-59, _, _/2, etc                                                                                                                              |
+| `prune_schedule_hour`    |           no (`*`)            | Hour when the job is run. ( 0-23, _, _/2, etc                                                                                                                                |
+| `prune_schedule_weekday` |           no (`*`)            | Weekday when the job is run. ( 0-6 for Sunday-Saturday, \*, etc                                                                                                              |
+| `prune_schedule_month`   |           no (`*`)            | Month when the job is run. ( 1-12, _, _/2, etc                                                                                                                               |
+| `exclude`                |           no (`{}`)           | Allows you to specify files to exclude. See [Exclude](#exclude) for reference.                                                                                               |
+| `verbose`                |           no (`0`)            | Enable verbosity (max level is 3)                                                                                                                                            |
 
 Example:
 
@@ -182,15 +188,15 @@ files to look for filenames to be excluded. You can specify the following keys:
 
 ```yaml
 exclude:
-    exclude_cache: true
-    exclude:
-        - /path/to/file
-    iexclude:
-        - /path/to/file
-    exclude_file:
-        - /path/to/file
-    exclude_if_present:
-        - /path/to/file
+  exclude_cache: true
+  exclude:
+    - /path/to/file
+  iexclude:
+    - /path/to/file
+  exclude_file:
+    - /path/to/file
+  exclude_if_present:
+    - /path/to/file
 ```
 
 Please refer to the use of the specific keys to the
