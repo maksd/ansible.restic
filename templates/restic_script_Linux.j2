@@ -125,7 +125,7 @@ if [[ -z ${PRUNE+x} ]]; then
     {{ tags(item.tags) }} \
     {% if item.exclude is defined %}{{ exclude(item.exclude) }}{% endif %} \
     $@ \
-{% endif %} | tee {{ backup_output_log }}
+{% endif %} | tee -a {{ backup_output_log }}
   if [[ $? -eq 0 ]]; then
     echo "$(date -u '+%Y-%m-%d %H:%M:%S') OK" >> {{ backup_result_log }}
   else
@@ -135,14 +135,14 @@ if [[ -z ${PRUNE+x} ]]; then
 {#
   Define stdin forget commands
 #}
-  {{ restic_install_path }}/restic forget --path {{ path(item) }} {{ retention_pattern(item) }} {% if item.prune_forget is defined and item.prune_forget == true %}--prune{% endif %} --verbose={{ item.verbose|default(0) }} | tee {{ forget_output_log }}
+  {{ restic_install_path }}/restic forget --path {{ path(item) }} {{ retention_pattern(item) }} {% if item.prune_forget is defined and item.prune_forget == true %}--prune{% endif %} --verbose={{ item.verbose|default(0) }} | tee -a {{ forget_output_log }}
   if [[ $? -eq 0 ]]; then
     echo "$(date -u '+%Y-%m-%d %H:%M:%S') OK" >> {{ forget_result_log }}
   else
     echo "$(date -u '+%Y-%m-%d %H:%M:%S') ERROR" >> {{ forget_result_log }}
   fi
 else
-  {{ restic_install_path }}/restic prune --verbose={{ item.verbose|default(0) }} | tee {{ prune_output_log }}
+  {{ restic_install_path }}/restic prune --verbose={{ item.verbose|default(0) }} | tee -a {{ prune_output_log }}
   if [[ $? -eq 0 ]]; then
     echo "$(date -u '+%Y-%m-%d %H:%M:%S') OK" >> {{ prune_result_log }}
   else
